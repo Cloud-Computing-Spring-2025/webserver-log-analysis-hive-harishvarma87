@@ -25,7 +25,7 @@ The following HiveQL queries were used to perform the analysis tasks:
 ### 1. Count Total Web Requests
 ```sql
 INSERT OVERWRITE DIRECTORY '/user/hue/output/total_requests'
-SELECT COUNT(*) FROM web_logs;
+SELECT COUNT(*) FROM hue__tmp_web_server_logs;
 ```
 Retrieve the output in bash
 ```bash
@@ -36,7 +36,7 @@ hdfs dfs -getmerge /user/hue/output/total_requests total_requests.txt
 ```sql
 INSERT OVERWRITE DIRECTORY '/user/hue/output/status_codes'
 SELECT status, COUNT(*) 
-FROM web_logs 
+FROM hue__tmp_web_server_logs
 GROUP BY status 
 ORDER BY status;
 ```
@@ -49,7 +49,7 @@ hdfs dfs -getmerge /user/hue/output/status_codes status_codes.txt
 ```sql
 INSERT OVERWRITE DIRECTORY '/user/hue/output/most_visited_pages'
 SELECT url, COUNT(*) AS visit_count
-FROM web_logs
+FROM hue__tmp_web_server_logs
 GROUP BY url
 ORDER BY visit_count DESC
 LIMIT 3;
@@ -63,7 +63,7 @@ hdfs dfs -getmerge /user/hue/output/most_visited_pages most_visited_pages.txt
 ```sql
 INSERT OVERWRITE DIRECTORY '/user/hue/output/user_agents'
 SELECT user_agent, COUNT(*) AS user_count
-FROM web_logs
+FROM hue__tmp_web_server_logs
 GROUP BY user_agent
 ORDER BY user_count DESC;
 ```
@@ -76,7 +76,7 @@ hdfs dfs -getmerge /user/hue/output/user_agents user_agents.txt
 ```sql
 INSERT OVERWRITE DIRECTORY '/user/hue/output/suspicious_ips'
 SELECT ip, COUNT(*) AS failed_requests
-FROM web_logs
+FROM hue__tmp_web_server_logs
 WHERE status IN (404, 500)
 GROUP BY ip
 HAVING COUNT(*) > 3
@@ -90,9 +90,9 @@ hdfs dfs -getmerge /user/hue/output/suspicious_ips suspicious_ips.txt
 ### 6. Export Suspicious IP Addresses
 ```sql
 INSERT OVERWRITE DIRECTORY '/user/hue/output/traffic_trends'
-SELECT DATE_FORMAT(timestamp, 'yyyy-MM-dd HH:mm') AS request_minute, COUNT(*) AS request_count
-FROM web_logs
-GROUP BY DATE_FORMAT(timestamp, 'yyyy-MM-dd HH:mm')
+SELECT DATE_FORMAT(`timestamp`, 'yyyy-MM-dd HH:mm') AS request_minute, COUNT(*) AS request_count
+FROM hue__tmp_web_server_logs
+GROUP BY DATE_FORMAT(`timestamp`, 'yyyy-MM-dd HH:mm')
 ORDER BY request_minute;
 ```
 Retrieve the output in bash
