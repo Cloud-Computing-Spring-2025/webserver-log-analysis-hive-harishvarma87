@@ -179,27 +179,35 @@ Total Requests: 100
 #### Status Code Analysis:
 
 200: 80
+
 404: 10
+
 500: 10
 
 #### Most Visited Pages:
 
 /home: 50
+
 /products: 30
+
 /checkout: 20
 
 #### Traffic Source Analysis:
 
 Mozilla/5.0: 60
+
 Chrome/90.0: 30
+
 Safari/13.1: 10
 
 #### Suspicious IP Addresses:
 
 192.168.1.10: 5 failed requests
+
 192.168.1.15: 4 failed requests
 
 #### Traffic Trend Over Time:
 
 2024-02-01 10:15: 5 requests
+
 2024-02-01 10:16: 7 requests
